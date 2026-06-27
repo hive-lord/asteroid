@@ -12,6 +12,9 @@ def main():
     dt = 0.0
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
+    updatable = pg.sprite.Group()
+    drawable = pg.sprite.Group()
+    Player.containers = (updatable, drawable)
     player = Player(x, y)
 
     while True:
@@ -20,9 +23,11 @@ def main():
             if event.type == pg.QUIT:
                 return
         screen.fill("black")
-        player.draw(screen)
-        pg.display.flip()
+        for i in drawable:
+            i.draw(screen)
         dt = clock.tick(60) / 1000
+        updatable.update(dt)
+        pg.display.flip()
 
 
 if __name__ == "__main__":

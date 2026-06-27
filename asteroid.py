@@ -1,0 +1,6 @@
+from circleshape import CircleShape
+
+
+class asteroid(CircleShape):
+    def __init__(self, x: float, y: float, radius: float) -> None:
+        super().__init__(x, y, radius)
