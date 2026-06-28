@@ -1,70 +1,88 @@
 # Asteroid Shooter
 
-A minimal classic **asteroid shooter** built with [Pygame](https://www.pygame.org/).  Copy the code, hit *Space* and you'll ram mines to death.
+A minimal, classic **asteroid shooter** built with [Pygame](https://www.pygame.org/). Move your ship, avoid collisions, shoot down asteroids, and monitor real-time game logs.
 
 ---
-## 📦 Project structure
+
+## 📦 Project Structure
+
 ```
-├─ asteroid.py          # Single asteroid sprite
-├─ asteroidfield.py     # Generates a field of asteroids
-├─ circleshape.py       # Base class for circle‑shaped sprites
-├─ constants.py         # Game configuration values
-├─ logger.py            # Very small JSONL logger
-├─ main.py              # Entry point – game loop & setup
-├─ player.py            # Ship logic (movement, rotation, shooting)
-└─ shot.py              # Bullet / missile sprite
+├─ asteroid.py          # Single asteroid sprite class
+├─ asteroidfield.py     # Generates and manages the field of asteroids
+├─ circleshape.py       # Base class for circle‑shaped collision sprites
+├─ constants.py         # Game configuration and constants
+├─ logger.py            # Simple JSONL logger for event/state tracking
+├─ main.py              # Entry point – game setup and main loop
+├─ player.py            # Player ship logic (movement, rotation, shooting)
+└─ shot.py              # Bullet / missile sprite class
 ```
-The game is intentionally small: all `pygame.sprite.Sprite` subclasses live in individual files and the rendering/physics are handled by their respective update methods.
+
+The game is designed with simplicity in mind: all `pygame.sprite.Sprite` subclasses live in individual modules, with rendering and physics processed via Pygame groups in `main.py`.
 
 ---
-## 🎮 Gameplay – How to play
+
+## 🎮 Gameplay & Controls
+
 | Key | Action |
-|-----|--------|
+| :--- | :--- |
 | **W** | Move ship forward |
-| **S** | Reverse ship |
-| **A** | Turn left |
-| **D** | Turn right |
-| **Space** | Fire missile (with a short cooldown) |
+| **S** | Reverse / move ship backward |
+| **A** | Rotate ship counter-clockwise (turn left) |
+| **D** | Rotate ship clockwise (turn right) |
+| **Space** | Fire projectile (with shot cooldown) |
 
-The objective is simple: avoid colliding with asteroids while shooting them down before they hit you.
+### Objective
+Avoid colliding with the floating asteroids. Shoot them to split and destroy them. The game ends instantly if an asteroid collides with your ship.
 
-Press *Esc* or close the window to exit.
+Press **Esc** or close the game window to exit.
 
 ---
-## 🚀 Running locally
-1. **Clone the repo**.
+
+## 🚀 Running Locally
+
+This project supports running via traditional virtual environments or [uv](https://github.com/astral-sh/uv).
+
+### Option A: Using `uv` (Recommended)
+If you have `uv` installed, it will automatically handle virtual environment creation and package installation for you:
+```bash
+uv run main.py
+```
+
+### Option B: Standard Python Setup
+1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your‑repo/asteroid.git
+   git clone https://github.com/your-username/asteroid.git
    cd asteroid
    ```
-2. **Install dependencies** (the project only needs Pygame).
+2. **Set up a virtual environment and install dependencies**:
    ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
    pip install pygame
    ```
-3. **Run the game**.
+3. **Run the game**:
    ```bash
    python main.py
    ```
-The window starts automatically; no additional assets are required.
 
 ---
-## 👓 Logging (developer interest)
-- **State snapshots** (`game_state.jsonl`) are written once per second and contain counts/snapshots of each sprite group.  They can be useful for debugging physics or visualising state over time.
-- **Events** (`game_events.jsonl`) capture key moments such as:
-  - `player_hit`
-  - `asteroid_shot`
 
-Both files are simple JSON‑lines and reset on every new run.
+## 👓 Logging & Debugging
+
+The game outputs structured logs in JSON Lines (JSONL) format for analytics or debugging:
+- **`game_state.jsonl`**: Saved once per second, tracking the count and coordinates of active sprites.
+- **`game_events.jsonl`**: Captures critical events in real time:
+  - `player_hit`: Triggered when the ship is hit by an asteroid.
+  - `asteroid_shot`: Triggered when a bullet successfully hits an asteroid.
+
+These log files are overwritten or reset on every game launch.
 
 ---
-## 🛠️ Extending the game
-The project structure is deliberately straightforward; just edit or add a module and import it in `main.py`.
 
-### Change the control scheme
-Open `player.py`: modify the key checks under `update()` → `keys = pg.key.get_pressed()`.
+## 🛠️ Customization & Balancing
 
-### Tweak gameplay balance
-Values live in **constants.py**:
+All design and gameplay balancing parameters can be found in `constants.py`. You can adjust them directly:
+
 ```python
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
@@ -72,15 +90,12 @@ PLAYER_TURN_SPEED = 300          # Degrees per second
 PLAYER_SHOOT_COOLDOWN_SECONDS = 0.3
 ASTEROID_SPAWN_RATE_SECONDS = 0.8
 ```
-Values are unitless constants – update them, re‑run and test.
 
-### Add a new sprite class
-A new `pygame.sprite.Sprite` subclass can be instantiated just like `Asteroid` or `Shot`.  Import it in `main.py` and add it to an appropriate sprite group.
+Simply update these values, save the file, and re-launch the game.
 
 ---
-## 🧪 Testing & CI (future work)
-No test suite is provided yet.  If you wish to add one, write unit tests against the logic in e.g. `player.py` or `AsteroidField` and run them with any test runner you prefer.
 
----
 ## 📜 License
-This project is released under the MIT license.
+
+This project is licensed under the MIT License.
+
