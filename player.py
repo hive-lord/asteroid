@@ -4,6 +4,7 @@ from circleshape import CircleShape
 from constants import (
     LINE_WIDTH,
     PLAYER_RADIUS,
+    PLAYER_SHOOT_COOLDOWN_SECONDS,
     PLAYER_SHOOT_SPEED,
     PLAYER_SPEED,
     PLAYER_TURN_SPEED,
@@ -15,6 +16,7 @@ class Player(CircleShape):
     def __init__(self, x: float, y: float) -> None:
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
+        self.timer = 0
 
     # in the Player class
     def triangle(self) -> list[pg.Vector2]:
@@ -34,6 +36,7 @@ class Player(CircleShape):
 
     def update(self, dt: float) -> None:
         keys = pg.key.get_pressed()
+        self.timer -= dt
 
         if keys[pg.K_a]:
             self.rotate(-1 * dt)
@@ -44,7 +47,11 @@ class Player(CircleShape):
         if keys[pg.K_s]:
             self.move(-1 * dt)
         if keys[pg.K_SPACE]:
-            self.shoot()
+            if self.timer > 0:
+                pass
+            else:
+                self.shoot()
+                self.timer = PLAYER_SHOOT_COOLDOWN_SECONDS
 
     def move(self, dt: float) -> None:
         unit_vector = pg.Vector2(0, 1)

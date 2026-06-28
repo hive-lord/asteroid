@@ -26,6 +26,8 @@ def main():
     AsteroidField.containers = updatable
     Shot.containers = (shots, updatable, drawable)
     asteroidfields = AsteroidField()
+    _ = asteroidfields
+
     player = Player(x, y)
 
     while True:
@@ -38,11 +40,15 @@ def main():
         updatable.update(dt)
         for i in drawable:
             i.draw(screen)
-        for i in asteroids:
-            if i.collides_with(player):
+        for asteroid in asteroids:
+            if asteroid.collides_with(player):
                 log_event("player_hit")
                 print("Game over!")
                 sys.exit()
+            for shot in shots:
+                if asteroid.collides_with(shot):
+                    log_event("asteroid_shot")
+                    asteroid.split()
         pg.display.flip()
 
 
