@@ -22,7 +22,7 @@ class Asteroid(CircleShape):
         if self.radius < ASTEROID_MIN_RADIUS:
             return
         else:
-            log_event("asterod_split")
+            log_event("asteroid_split")
             angle = rm.uniform(20, 50)
             v1 = self.velocity.rotate(angle)
             v2 = self.velocity.rotate(-angle)
